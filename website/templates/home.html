@@ -10,7 +10,12 @@
         
             {% if game_capacity < 100 %}
             <div class="flex-row">
-                <div>{{game.game_name}}</div>
+                <div>{{ game.game_name }}</div>
+                <div>
+                    <img src="static/images/{{ game.game_name + '.jpg' }}" 
+                         alt="{{ game.game_name }}"
+                         style="width: 100%; height:auto"
+                ></div>
                 <div>{{game_capacity}} / 100</div>
                     {% if enrolled_user == "enrolled" %}
 
@@ -33,6 +38,11 @@
             {% else%}
             <div class="flex-row">
                 <div>{{game.game_name}}</div>
+                <div>
+                    <img src="static/images/{{ game.game_name + '.jpg' }}" 
+                         alt="{{ game.game_name }}"
+                         style="width: 100%; height:auto"
+                ></div>
                 <div>100 / 100</div>
                 
                 <button type="submit" class="btn btn-danger">Bid closed!</button>
