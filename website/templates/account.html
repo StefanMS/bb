@@ -1,0 +1,22 @@
+{% extends "base.html" %} 
+{% block title %}Account{% endblock %} 
+
+{% block content %}
+<h1 align="center">Account info</h1>
+
+    <h3>First name</h3>
+    {{ user.first_name }}
+    <h3>Email</h3>
+    {{ user.email }}
+    <h3>Balance</h3>
+    {% if user.balance %}
+        {{ user.balance }}
+    {% else %}
+        <p>O-oh. This looks empty</p>
+    {% endif%}
+    <form method="POST" action="/top-account">
+    <button type= "submit" id="topaccount" class="btn btn-primary">Top up your account now</button>
+    </form>
+    <h3>Date joined</h3>
+    {{ user.created_at }}
+{% endblock %} 

@@ -1,0 +1,36 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table bidding_basket{
+  player_id integer
+  player_name varchar
+  bike_id varchar
+  bike_name varchar
+  created_at timestamp 
+}
+
+Table users {
+  id integer [primary key]
+  username varchar
+  email varchar
+  password varchar
+  balance varchar
+  created_at timestamp
+}
+
+Table collection {
+  id integer [primary key]
+  bike_id varchar
+  bike_name varchar
+  capacity integer
+  countdown varchar
+  status varchar
+  created_at timestamp
+}
+
+
+Ref: users.id - bidding_basket.player_id
+Ref: users.username - bidding_basket.player_name
+Ref: collection.bike_id - bidding_basket.bike_id
+Ref: collection.bike_name - bidding_basket.bike_name
+

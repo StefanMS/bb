@@ -1,0 +1,83 @@
+{% extends "base.html" %} 
+{% block title %}Home | Bidder{% endblock %} 
+
+{% block content %}
+<h1>Start bidding now!</h1>
+<h1 align="center">Games</h1>
+    <div class="flex-container">
+    {% for game, temp in game_dict.items()%}
+        {% for enrolled_user, game_capacity in temp.items() %}
+        
+            {% if game_capacity < 100 %}
+            <div class="flex-row">
+                <div>{{game.game_name}}</div>
+                <div>{{game_capacity}} / 100</div>
+                    {% if enrolled_user == "enrolled" %}
+
+                    <div> Already enlisted</div>
+                    
+                    <form method="POST" action="/bid?gameid={{game.game_id}}">
+                        <button type="submit" class="btn btn-primary">Bid again!</button>
+                    </form>
+
+                    {% else %}
+
+                                        
+                    <form method="POST" action="/bid?gameid={{game.game_id}}">
+                        <button type="submit" class="btn btn-primary">Bid!</button>
+                    </form>  
+
+                    {% endif %}
+
+            </div>
+            {% else%}
+            <div class="flex-row">
+                <div>{{game.game_name}}</div>
+                <div>100 / 100</div>
+                
+                <button type="submit" class="btn btn-danger">Bid closed!</button>
+                
+            </div>
+            {% endif %}
+            {% endfor %}
+    {% endfor%}
+    </div>
+
+<!--
+
+<h1 align="center">Notes</h1>
+    <ul class="list-group list-group-flush" id="notes">
+    {% for note in user.notes %}
+    <li class="list-group-item">{{ note.data }}
+        <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+            <span aria-hidden="true">&times;</span>
+    </li>
+    {% endfor %}
+    </ul>
+<form method="POST">
+    <textarea name="note" id="note" class="form-control"></textarea>
+    <br/>
+    <div align="center">
+        <button type="submit" class="btn btn-primary">Add Note</button>
+    </div>
+</form>
+-->
+<style>
+    .flex-container {
+        display: flex;
+        background-color:beige ;
+        flex-wrap: wrap;
+        border: 1px solid black;
+        border-radius: 5px;
+
+    }
+    .flex-row {
+        width: 50%;
+        padding: 10px;
+        text-align: center;
+    }
+
+
+</style>
+
+{% endblock %} 

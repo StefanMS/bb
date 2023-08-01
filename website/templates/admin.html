@@ -1,0 +1,39 @@
+{% extends "base.html" %} 
+{% block title %}Admin{% endblock %} 
+
+{% block content %}
+<h1 align="center">Admin panel</h1>
+
+<form method="POST" action="/add-game">
+    <h2>Add game</h2>
+
+    <div class="form-group">
+        <label for="game_name">Game name</label>
+        <input type="text" class="form-control" id="game_name" name="game_name" placeholder="Enter game name"/>
+    </div>
+
+    <div class="form-group">
+        <label for="game_status">Status</label>
+        <input type="text" class="form-control" id="game_status" name="game_status" placeholder="Enter game status"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<h1 align="center">All Games</h1>
+    <div class="flex-container">
+    {% for game in collection%}
+
+        <div class="flex-row">
+            <div>{{game.game_name}}</div>
+            <form method="POST" action="/activate-game?gameid={{game.game_id}}">
+                {% if game.game_status == 'active'%}
+                <button type="submit" class="btn btn-danger">Deactivate</button>
+                {% else%}
+                <button type="submit" class="btn btn-primary">Activate</button>
+                {% endif %}
+            </form>
+        </div>
+
+    {% endfor%}
+{% endblock %} 
