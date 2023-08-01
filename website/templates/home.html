@@ -2,67 +2,65 @@
 {% block title %}Home | Bidder{% endblock %} 
 
 {% block content %}
-<h1>Start bidding now!</h1>
-<h1 align="center">Games</h1>
-    <div class="flex-container">
-    {% for game, temp in game_dict.items()%}
-        {% for enrolled_user, game_capacity in temp.items() %}
-        
-            {% if game_capacity < 100 %}
-            <div class="flex-row">
-                <div>{{game.game_name}}</div>
-                <div>{{game_capacity}} / 100</div>
-                    {% if enrolled_user == "enrolled" %}
-
+<h1>Avalable Games</h1>
+<div class="search-container">
+    <p> Search game: </p>
+    <p> Filter by:</p>
+</div>
+<div class="game-container">
+{% for game, temp in game_dict.items()%}
+    {% for enrolled_user, game_capacity in temp.items() %}
+    
+        {% if game_capacity < 100 %}
+        <div class="game-card">
+            <div class="game-title">{{ game.game_name }}</div>
+            <div class="game-img">
+                <img src="static/images/{{ game.game_name + '.jpg' }}"
+                        style="width: 45%;"
+                        alt="{{ game.game_name }}"
+            ></div>
+            <div class="game-capacity">{{game_capacity}} / 100</div>
+                {% if enrolled_user == "enrolled" %}
                     <div> Already enlisted</div>
-                    
                     <form method="POST" action="/bid?gameid={{game.game_id}}">
                         <button type="submit" class="btn btn-primary">Bid again!</button>
                     </form>
 
                     {% else %}
-
-                                        
                     <form method="POST" action="/bid?gameid={{game.game_id}}">
                         <button type="submit" class="btn btn-primary">Bid!</button>
                     </form>  
 
-                    {% endif %}
+                {% endif %}
 
-            </div>
-            {% else%}
-            <div class="flex-row">
-                <div>{{game.game_name}}</div>
-                <div>100 / 100</div>
-                
-                <button type="submit" class="btn btn-danger">Bid closed!</button>
-                
-            </div>
-            {% endif %}
-            {% endfor %}
-    {% endfor%}
-    </div>
+        </div>
+        {% else%}
+        <div class="game-card">
+            <div class="game-title">{{game.game_name}}</div>
+            <div class="game-img">
+                <img src="static/images/{{ game.game_name + '.jpg' }}" 
+                        style="width: 45%;"
+                        alt="{{ game.game_name }}"
+            ></div>
+            <div class="game-capacity">100 / 100</div>
+            
+            <button type="submit" class="btn btn-danger">Bid closed!</button>
+            
+        </div>
+        {% endif %}
+        {% endfor %}
+{% endfor%}
+</div>
 
-<!--
 
-<h1 align="center">Notes</h1>
-    <ul class="list-group list-group-flush" id="notes">
-    {% for note in user.notes %}
-    <li class="list-group-item">{{ note.data }}
-        <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-            <span aria-hidden="true">&times;</span>
-    </li>
-    {% endfor %}
-    </ul>
-<form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <br/>
-    <div align="center">
-        <button type="submit" class="btn btn-primary">Add Note</button>
-    </div>
-</form>
--->
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
     .flex-container {
         display: flex;
         background-color:beige ;
@@ -77,6 +75,62 @@
         text-align: center;
     }
 
+    /* Improve header styles */
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Improve game container styles */
+    .game-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Improve game card styles */
+    .game-card {
+        width: 45%;
+        margin-bottom: 20px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .game-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .game-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .game-capacity {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .game-status {
+        font-size: 14px;
+        color: #007bff;
+        margin-top: 10px;
+    }
+
+    .btn {
+        cursor: pointer;
+    }
 
 </style>
 
