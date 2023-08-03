@@ -3,54 +3,61 @@
 
 {% block content %}
 <h1>Avalable Games</h1>
-<div class="search-container">
+
+<section id="app_container">
+
+<div class="search-container" >
     <p> Search game: </p>
-    <p> Filter by:</p>
+    <input v-model="searched_item">
+    <!-- <p> [[ item ]]</p> -->
+    <p> Filter by: (dropdown)</p>
 </div>
+
 <div class="game-container">
-{% for game, temp in game_dict.items()%}
-    {% for enrolled_user, game_capacity in temp.items() %}
+
+{% for game in games_json %}
     
-        {% if game_capacity < 100 %}
+        {% if game['capacity'] < 100 %}
         <div class="game-card">
-            <div class="game-title">{{ game.game_name }}</div>
+            <div class="game-title">{{ game['name'] }}</div>
             <div class="game-img">
-                <img src="static/images/{{ game.game_name + '.jpg' }}"
+                <img src="static/images/{{ game['name'] + '.jpg' }}"
                         style="width: 45%;"
-                        alt="{{ game.game_name }}"
+                        alt="{{ game['name'] }}"
             ></div>
-            <div class="game-capacity">{{game_capacity}} / 100</div>
-                {% if enrolled_user == "enrolled" %}
-                    <div> Already enlisted</div>
-                    <form method="POST" action="/bid?gameid={{game.game_id}}">
-                        <button type="submit" class="btn btn-primary">Bid again!</button>
-                    </form>
+            <div class="game-capacity">{{game['capacity']}} / 100</div>
+            {% if game['enrolled_user'] == True %}
+                <div> Already enlisted</div>
+                <form method="POST" action="/bid?gameid={{game['id']}}">
+                    <button type="submit" class="btn btn-primary">Bid again!</button>
+                </form>
 
-                    {% else %}
-                    <form method="POST" action="/bid?gameid={{game.game_id}}">
-                        <button type="submit" class="btn btn-primary">Bid!</button>
-                    </form>  
+            {% else %}
+                <form method="POST" action="/bid?gameid={{game['id']}}">
+                    <button type="submit" class="btn btn-primary">Bid!</button>
+                </form>  
 
-                {% endif %}
-
+            {% endif %}
         </div>
+
         {% else%}
         <div class="game-card">
-            <div class="game-title">{{game.game_name}}</div>
+            <div class="game-title">{{game['name']}}</div>
             <div class="game-img">
-                <img src="static/images/{{ game.game_name + '.jpg' }}" 
+                <img src="static/images/{{ game['name'] + '.jpg' }}" 
                         style="width: 45%;"
-                        alt="{{ game.game_name }}"
+                        alt="{{ game['name'] }}"
             ></div>
             <div class="game-capacity">100 / 100</div>
             
-            <button type="submit" class="btn btn-danger">Bid closed!</button>
+            <button type="submit" class="btn btn-danger disabled">Bid closed!</button>
             
         </div>
         {% endif %}
-        {% endfor %}
+
 {% endfor%}
 </div>
+</section>
 
 
 <style>
@@ -133,5 +140,26 @@
     }
 
 </style>
-
+<script 
+    src="https://unpkg.com/vue@3/dist/vue.global.js"
+    ></script>
+<!-- <script
+    type="text/javascript"
+    src="{{ url_for('static', filename='search.js')}}"
+    
+></script> -->
+<script>
+    var games_json = {{ games_json|tojson|safe }};
+    const app = Vue.createApp({
+        data() {
+            return {
+                json: games_json,
+                searched_item: ''
+            }
+        },
+    
+        delimiters: ['[[',']]']
+    });
+    app.mount('#app_container');
+</script>
 {% endblock %} 

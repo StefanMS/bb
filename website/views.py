@@ -10,17 +10,9 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     active_games = Collection.query.filter_by(game_status="active")
-    game_dict = {}
-    for game in active_games:
-        bidding_basket = Bidding_Basket.query.filter_by(game_id=game.game_id)
+    games_json = jsonify_collection(active_games)
 
-        game_capacity = bidding_basket.count()
-        enrolled_user = "enrolled" if Bidding_Basket.query.filter_by(game_id=game.game_id, player_id=current_user.id).first() else "not enrolled"
-
-        game_dict[game] = {enrolled_user : game_capacity}
-        print(game_dict)
-
-    return render_template("home.html", user=current_user, game_dict=game_dict)
+    return render_template("home.html", user=current_user, games_json=games_json)
 
 
 @views.route('/bid', methods=['GET','POST'])
@@ -43,15 +35,23 @@ def bid():
     return redirect('/', code=302)
 
 
+def jsonify_collection(active_games):
+    '''
+        The function takes a user-filtered query, not intended for whole collection
+    '''
+    games_json = []
+    for game in active_games:
+        bidding_basket = Bidding_Basket.query.filter_by(game_id=game.game_id)
 
-# @views.route('/delete-note', methods=['POST'])
-# def delete_note():
-#     note = json.loads(request.data)
-#     noteId = note['noteId']
-#     note = Note.query.get(noteId)
-#     if note:
-#         if note.user_id == current_user.id:
-#             db.session.delete(note)
-#             db.session.commit()
-    
-#     return jsonify({})
+        game_capacity = bidding_basket.count()
+        enrolled_user_bool = True if Bidding_Basket.query.filter_by(game_id=game.game_id, player_id=current_user.id).first() \
+            else False
+        game_as_dict = {
+            'id' : game.game_id,
+            'name' : game.game_name,
+            'status' : game.game_status,
+            'enrolled_user' : enrolled_user_bool,
+            'capacity' : game_capacity
+        }
+        games_json.append(game_as_dict)
+    return games_json
