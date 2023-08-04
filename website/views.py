@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect
 from .models import User, Collection, Bidding_Basket
 from flask_login import login_required, current_user
+from datetime import datetime, timedelta
 from . import db
 
 views = Blueprint('views', __name__)
@@ -46,12 +47,16 @@ def jsonify_collection(active_games):
         game_capacity = bidding_basket.count()
         enrolled_user_bool = True if Bidding_Basket.query.filter_by(game_id=game.game_id, player_id=current_user.id).first() \
             else False
+        now_timestamp = datetime.now().timestamp()
+        countdown = now_timestamp - game.created_at.timestamp()
+        print(timedelta(seconds=countdown))
         game_as_dict = {
             'id' : game.game_id,
             'name' : game.game_name,
             'status' : game.game_status,
             'enrolled_user' : enrolled_user_bool,
-            'capacity' : game_capacity
+            'capacity' : game_capacity,
+            'countdown' : str(f'{int(countdown//3600)} hours left')
         }
         games_json.append(game_as_dict)
     return games_json

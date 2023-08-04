@@ -16,45 +16,38 @@
 <div class="game-container">
 
 {% for game in games_json %}
-    
-        {% if game['capacity'] < 100 %}
-        <div class="game-card">
-            <div class="game-title">{{ game['name'] }}</div>
-            <div class="game-img">
-                <img src="static/images/{{ game['name'] + '.jpg' }}"
-                        style="width: 45%;"
-                        alt="{{ game['name'] }}"
-            ></div>
-            <div class="game-capacity">{{game['capacity']}} / 100</div>
-            {% if game['enrolled_user'] == True %}
-                <div> Already enlisted</div>
-                <form method="POST" action="/bid?gameid={{game['id']}}">
-                    <button type="submit" class="btn btn-primary">Bid again!</button>
-                </form>
 
-            {% else %}
-                <form method="POST" action="/bid?gameid={{game['id']}}">
-                    <button type="submit" class="btn btn-primary">Bid!</button>
-                </form>  
+<div class="game-card">
+    <div class="game-title">{{ game['name'] }}</div>
+    <div class="game-img">
+        <img src="static/images/{{ game['name'] + '.jpg' }}"
+                style="width: 45%;"
+                alt="{{ game['name'] }}"
+    ></div>
 
-            {% endif %}
-        </div>
-
-        {% else%}
-        <div class="game-card">
-            <div class="game-title">{{game['name']}}</div>
-            <div class="game-img">
-                <img src="static/images/{{ game['name'] + '.jpg' }}" 
-                        style="width: 45%;"
-                        alt="{{ game['name'] }}"
-            ></div>
-            <div class="game-capacity">100 / 100</div>
-            
-            <button type="submit" class="btn btn-danger disabled">Bid closed!</button>
-            
-        </div>
+    {% if game['capacity'] < 100 %}
+        <div class="game-capacity">{{game['capacity']}} / 100</div>
+        {% if game['enrolled_user'] == True %}
+            <div> Already enlisted</div>
+            <form method="POST" action="/bid?gameid={{game['id']}}">
+                <button type="submit" class="btn btn-primary">Bid again!</button>
+            </form>
+        {% else %}
+            <form method="POST" action="/bid?gameid={{game['id']}}">
+                <button type="submit" class="btn btn-primary">Bid!</button>
+            </form>  
         {% endif %}
 
+    {% else%}
+        <div class="game-capacity">100 / 100</div>
+        <button type="submit" class="btn btn-danger disabled">Bid closed!</button>
+    {% endif %}
+    
+        <div class="game-countdown">
+            {{game['countdown']}}
+        </div>
+</div>
+    
 {% endfor%}
 </div>
 </section>
@@ -68,20 +61,7 @@
         padding: 0;
         background-color: #f0f0f0;
     }
-    .flex-container {
-        display: flex;
-        background-color:beige ;
-        flex-wrap: wrap;
-        border: 1px solid black;
-        border-radius: 5px;
-
-    }
-    .flex-row {
-        width: 50%;
-        padding: 10px;
-        text-align: center;
-    }
-
+    
     /* Improve header styles */
     h1, h2 {
         text-align: center;
@@ -129,6 +109,11 @@
         margin-top: 10px;
     }
 
+    .game-countdown {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
     .game-status {
         font-size: 14px;
         color: #007bff;
@@ -149,7 +134,7 @@
     
 ></script> -->
 <script>
-    var games_json = {{ games_json|tojson|safe }};
+    var games_json = {{ games_json|tojson|safe }}; 
     const app = Vue.createApp({
         data() {
             return {
