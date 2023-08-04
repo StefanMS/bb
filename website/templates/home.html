@@ -13,7 +13,7 @@
     v-model="searched_item"
     placeholder="Enter game name...">
     <label for="filter-dropdown">Filter by:</label>
-    <select id="filter-dropdown" v-model="selected_filter">
+    <select id="filter-dropdown">
         <option value="genre">Genre</option>
         <option value="platform">Platform</option>
         <option value="release">Release Year</option>
@@ -22,7 +22,7 @@
 </div>
 
 
-
+<!-- 
 <div class="game-container">
     <div v-for= "game in filteredGames" class="game-card">
         <div class="game-title">[[ game.name ]]</div>
@@ -53,29 +53,29 @@
         </div>
 
     </div>
-</div>
+</div> -->
+<div class="game-container">
 
-<!-- <div class="game-container">
 
 {% for game in games_json %}
 
-<div class="game-card">
-    <div class="game-title">{{ game['name'] }}</div>
+<div class="game-card" id="{{game.name}}">
+    <div class="game-title">{{ game.name }}</div>
     <div class="game-img">
-        <img src="static/images/{{ game['name'] + '.jpg' }}"
+        <img src="static/images/{{ game.name + '.jpg' }}"
                 style="width: 45%;"
-                alt="{{ game['name'] }}"
-    ></div>
+                alt="{{ game.name }}"
+    ></div> 
 
-    {% if game['capacity'] < 100 %}
-        <div class="game-capacity">{{game['capacity']}} / 100</div>
-        {% if game['enrolled_user'] == True %}
+    {% if game.capacity < 100 %}
+        <div class="game-capacity">{{game.capacity}} / 100</div>
+        {% if game.enrolled_user == True %}
             <div> Already enlisted</div>
-            <form method="POST" action="/bid?gameid={{game['id']}}">
+            <form method="POST" action="/bid?gameid={{game.id}}">
                 <button type="submit" class="btn btn-primary">Bid again!</button>
             </form>
         {% else %}
-            <form method="POST" action="/bid?gameid={{game['id']}}">
+            <form method="POST" action="/bid?gameid={{game.id}}">
                 <button type="submit" class="btn btn-primary">Bid!</button>
             </form>  
         {% endif %}
@@ -86,12 +86,12 @@
     {% endif %}
     
         <div class="game-countdown">
-            {{game['countdown']}}
+            {{game.countdown}}
         </div>
 </div>
-    
 {% endfor%}
-</div> -->
+</div>
+
 </section>
 
 
@@ -106,18 +106,47 @@
             return {
                 games_json: games_json,
                 searched_item: '',
+                all_games: [],
+                filtered_games_json: [],
+                filtered_games_list: [],
             };
         },
         methods: {
-            bidGame() {
-                
-            }
+          filterGames(filtered_games_json) {
+            filtered_games_list = [];         
+            for (var game in filtered_games_json){
+                filtered_games_list.push(filtered_games_json[game].name)
+            };
+
+            return filtered_games_list
+          },
+          getAllGames(games_json){
+            all_games_list = [];
+            for (var game in games_json){
+                all_games_list.push(games_json[game].name)
+            }; 
+
+            return all_games_list
+            },
+          showComparedGames(filtered_games_list, all_games_list){
+            for (index in all_games_list){
+                if (filtered_games_list.includes(all_games_list[index])){
+                    document.getElementById(all_games_list[index]).style.display = "block";
+                } else {
+                    document.getElementById(all_games_list[index]).style.display = "none";
+                }
+            };
+          }
+    
         },
-        computed: {
-            filteredGames() {
-                return this.games_json.filter(game => game.name.toLowerCase().includes(this.searched_item.toLowerCase()));
-            }
+        watch: {
+            searched_item() {
+                this.filtered_games_json = this.games_json.filter(game => game.name.toLowerCase().includes(this.searched_item.toLowerCase()));
+                this.showComparedGames(this.filterGames(this.filtered_games_json), this.getAllGames(this.games_json))
+                }
+            
         },
+
         delimiters: ['[[',']]']
     });
     app.mount('#app_container');
