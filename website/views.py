@@ -35,8 +35,8 @@ def bid():
             print("Balance error") 
     return redirect('/', code=302)
 
-
-def jsonify_collection(active_games):
+# IT DOES NOT SEND A JSON, BUT A LIST!
+def jsonify_collection(active_games) -> list:
     '''
         The function takes a user-filtered query, not intended for whole collection
     '''
