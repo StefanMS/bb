@@ -12,7 +12,11 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'pacanele'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    #app.config['MESSAGE_FLASHING_OPTIONS'] = {'duration': 3}
+    app.config.update(
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE='Lax',
+        )
     db.init_app(app)
 
     from .views import views

@@ -2,136 +2,153 @@
 {% block title %}Home | Bidder{% endblock %} 
 
 {% block content %}
-<h1>Avalable Games</h1>
-<div class="search-container">
-    <p> Search game: </p>
-    <p> Filter by:</p>
+<h1>Games this week</h1>
+
+<section id="app_container">
+
+<div class="search-container" >
+    <label for="search-input">Search game:</label>
+    <input id="search-input" 
+    type="text" 
+    v-model="searched_item"
+    placeholder="Enter game name...">
+    <label for="filter-dropdown">Filter by:</label>
+    <select id="filter-dropdown">
+        <option value="genre">Genre</option>
+        <option value="platform">Platform</option>
+        <option value="release">Release Year</option>
+        <!-- Add more filter options as needed -->
+    </select>
 </div>
+
+
+<!-- 
 <div class="game-container">
-{% for game, temp in game_dict.items()%}
-    {% for enrolled_user, game_capacity in temp.items() %}
-    
-        {% if game_capacity < 100 %}
-        <div class="game-card">
-            <div class="game-title">{{ game.game_name }}</div>
-            <div class="game-img">
-                <img src="static/images/{{ game.game_name + '.jpg' }}"
-                        style="width: 45%;"
-                        alt="{{ game.game_name }}"
-            ></div>
-            <div class="game-capacity">{{game_capacity}} / 100</div>
-                {% if enrolled_user == "enrolled" %}
-                    <div> Already enlisted</div>
-                    <form method="POST" action="/bid?gameid={{game.game_id}}">
-                        <button type="submit" class="btn btn-primary">Bid again!</button>
-                    </form>
+    <div v-for= "game in filteredGames" class="game-card">
+        <div class="game-title">[[ game.name ]]</div>
+        
+        <span v-if="game.capacity < 100">
+            <div class="game-capacity">[[game.capacity]] / 100</div>
 
-                    {% else %}
-                    <form method="POST" action="/bid?gameid={{game.game_id}}">
-                        <button type="submit" class="btn btn-primary">Bid!</button>
-                    </form>  
+            <span v-if=" game['enrolled_user'] == True ">
+                <div> Already enlisted</div>
+                <form ref="form">
+                    <button @click="bidGame" type="submit" class="btn btn-primary">Bid again!</button>
+                </form>
+            </span>
+            <span v-else>
+                <form method="POST" action="/bid?gameid=[[game['id']]]">
+                    <button type="submit" class="btn btn-primary">Bid!</button>
+                </form>  
+            </span>
 
-                {% endif %}
-
-        </div>
-        {% else%}
-        <div class="game-card">
-            <div class="game-title">{{game.game_name}}</div>
-            <div class="game-img">
-                <img src="static/images/{{ game.game_name + '.jpg' }}" 
-                        style="width: 45%;"
-                        alt="{{ game.game_name }}"
-            ></div>
+        </span>
+        <span v-else>
             <div class="game-capacity">100 / 100</div>
-            
-            <button type="submit" class="btn btn-danger">Bid closed!</button>
-            
+            <button type="submit" class="btn btn-danger disabled">Bid closed!</button>
+        </span>
+
+        <div class="game-countdown">
+            [[ game.countdown ]]
         </div>
+
+    </div>
+</div> -->
+<div class="game-container">
+
+
+{% for game in games_json %}
+
+<div class="game-card" id="{{game.name}}">
+    <div class="game-title">{{ game.name }}</div>
+    <div class="game-img">
+        <img src="static/images/{{ game.name + '.jpg' }}"
+                style="width: 45%;"
+                alt="{{ game.name }}"
+    ></div> 
+
+    {% if game.capacity < 100 %}
+        <div class="game-capacity">{{game.capacity}} / 100</div>
+        {% if game.enrolled_user == True %}
+            <div> Already enlisted</div>
+            <form method="POST" action="/bid?gameid={{game.id}}">
+                <button type="submit" class="btn btn-primary">Bid again!</button>
+            </form>
+        {% else %}
+            <form method="POST" action="/bid?gameid={{game.id}}">
+                <button type="submit" class="btn btn-primary">Bid!</button>
+            </form>  
         {% endif %}
-        {% endfor %}
+
+    {% else%}
+        <div class="game-capacity">100 / 100</div>
+        <button type="submit" class="btn btn-danger disabled">Bid closed!</button>
+    {% endif %}
+    
+        <div class="game-countdown">
+            {{game.countdown}}
+        </div>
+</div>
 {% endfor%}
 </div>
 
+</section>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-        background-color: #f0f0f0;
-    }
-    .flex-container {
-        display: flex;
-        background-color:beige ;
-        flex-wrap: wrap;
-        border: 1px solid black;
-        border-radius: 5px;
 
-    }
-    .flex-row {
-        width: 50%;
-        padding: 10px;
-        text-align: center;
-    }
 
-    /* Improve header styles */
-    h1, h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+<script 
+    src="https://unpkg.com/vue@3/dist/vue.global.js"
+    ></script>
+<script>
+    var games_json = {{ games_json|tojson|safe }}; 
+    const app = Vue.createApp({
+        data() {
+            return {
+                games_json: games_json,
+                searched_item: '',
+                all_games: [],
+                filtered_games_json: [],
+                filtered_games_list: [],
+            };
+        },
+        methods: {
+          filterGames(filtered_games_json) {
+            filtered_games_list = [];         
+            for (var game in filtered_games_json){
+                filtered_games_list.push(filtered_games_json[game].name)
+            };
 
-    /* Improve game container styles */
-    .game-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        background-color: #ffffff;
-        border: 1px solid #cccccc;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
+            return filtered_games_list
+          },
+          getAllGames(games_json){
+            all_games_list = [];
+            for (var game in games_json){
+                all_games_list.push(games_json[game].name)
+            }; 
 
-    /* Improve game card styles */
-    .game-card {
-        width: 45%;
-        margin-bottom: 20px;
-        text-align: center;
-        border: 1px solid #e0e0e0;
-        border-radius: 5px;
-        padding: 10px;
-        background-color: #f9f9f9;
-    }
+            return all_games_list
+            },
+          showComparedGames(filtered_games_list, all_games_list){
+            for (index in all_games_list){
+                if (filtered_games_list.includes(all_games_list[index])){
+                    document.getElementById(all_games_list[index]).style.display = "block";
+                } else {
+                    document.getElementById(all_games_list[index]).style.display = "none";
+                }
+            };
+          }
+    
+        },
+        watch: {
+            searched_item() {
+                this.filtered_games_json = this.games_json.filter(game => game.name.toLowerCase().includes(this.searched_item.toLowerCase()));
+                this.showComparedGames(this.filterGames(this.filtered_games_json), this.getAllGames(this.games_json))
+                }
+            
+        },
 
-    .game-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .game-image img {
-        width: 100%;
-        height: auto;
-        border-radius: 5px;
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .game-capacity {
-        font-size: 14px;
-        margin-top: 10px;
-    }
-
-    .game-status {
-        font-size: 14px;
-        color: #007bff;
-        margin-top: 10px;
-    }
-
-    .btn {
-        cursor: pointer;
-    }
-
-</style>
-
+        delimiters: ['[[',']]']
+    });
+    app.mount('#app_container');
+</script>
 {% endblock %} 
