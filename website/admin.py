@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect
-from .models import Note, User, Collection
 from flask_login import login_required, current_user
+from flask import Blueprint, render_template, request, flash, redirect
+from .models import Collection
 from . import db
-import json
 
 admin = Blueprint('admin', __name__)
 
@@ -24,14 +23,16 @@ def add_game():
 @admin.route('/activate-game', methods=['GET','POST'])
 @login_required
 def activate_game():
-    
-    user = User.query.filter_by(email=current_user.email).first()
+
+    # user = User.query.filter_by(email=current_user.email).first()
 
     if request.method == 'POST':
         try:
             game_id = request.args.get('gameid')
             collection = Collection.query.filter_by(game_id=game_id).first()
-            collection.game_status = "active" if collection.game_status == "inactive" else "inactive"
+            collection.game_status = "active" \
+                if collection.game_status == "inactive" \
+                    else "inactive"
             db.session.commit()
             flash('Change successful!', category="success")
                 
@@ -43,6 +44,6 @@ def activate_game():
 @login_required
 def admin_view():
     collection = Collection.query
-    
+
     return render_template("admin.html", user=current_user, collection=collection)
 

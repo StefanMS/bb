@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template, request, flash, jsonify
-from .models import Note, User, Collection
+from flask import Blueprint, render_template, request
+from .models import User
 from flask_login import login_required, current_user
 from . import db
-import json
 
 account = Blueprint('account', __name__)
 
