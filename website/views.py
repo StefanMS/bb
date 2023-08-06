@@ -83,4 +83,3 @@ def jsonify_collection(active_games) -> list:
         }
         games_json.append(game_as_dict)
     return games_json
-
