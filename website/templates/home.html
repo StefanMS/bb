@@ -4,7 +4,7 @@
 {% block content %}
 <h1>Games this week</h1>
 
-<section id="app_container">
+<section id="home-app-container">
 
 <div class="search-container" >
     <label for="search-input">Search game:</label>
@@ -21,39 +21,6 @@
     </select>
 </div>
 
-
-<!-- 
-<div class="game-container">
-    <div v-for= "game in filteredGames" class="game-card">
-        <div class="game-title">[[ game.name ]]</div>
-        
-        <span v-if="game.capacity < 100">
-            <div class="game-capacity">[[game.capacity]] / 100</div>
-
-            <span v-if=" game['enrolled_user'] == True ">
-                <div> Already enlisted</div>
-                <form ref="form">
-                    <button @click="bidGame" type="submit" class="btn btn-primary">Bid again!</button>
-                </form>
-            </span>
-            <span v-else>
-                <form method="POST" action="/bid?gameid=[[game['id']]]">
-                    <button type="submit" class="btn btn-primary">Bid!</button>
-                </form>  
-            </span>
-
-        </span>
-        <span v-else>
-            <div class="game-capacity">100 / 100</div>
-            <button type="submit" class="btn btn-danger disabled">Bid closed!</button>
-        </span>
-
-        <div class="game-countdown">
-            [[ game.countdown ]]
-        </div>
-
-    </div>
-</div> -->
 <div class="game-container">
 
 
@@ -100,11 +67,10 @@
     src="https://unpkg.com/vue@3/dist/vue.global.js"
     ></script>
 <script>
-    var games_json = {{ games_json|tojson|safe }}; 
-    const app = Vue.createApp({
+    const home_app = Vue.createApp({
         data() {
             return {
-                games_json: games_json,
+                games_json: {{ games_json|tojson|safe }},
                 searched_item: '',
                 all_games: [],
                 filtered_games_json: [],
@@ -149,6 +115,6 @@
 
         delimiters: ['[[',']]']
     });
-    app.mount('#app_container');
+    home_app.mount('#home-app-container');
 </script>
 {% endblock %} 

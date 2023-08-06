@@ -10,11 +10,15 @@ account = Blueprint('account', __name__)
 def top_account():
     if request.method == 'POST':
         user = User.query.filter_by(email=current_user.email).first() # type: ignore
-        if user.balance:
-            user.balance = int(user.balance) + 10
-        else:
-            user.balance = 100
-        db.session.commit()
+        amount = request.form.get('top_amount')
+        try:
+            if user.balance:
+                user.balance = int(user.balance) + int(amount)
+            else:
+                user.balance = 0
+            db.session.commit()
+        except TypeError:
+            print("Error at account topping")
     return render_template("account.html", user=current_user)
 
 
