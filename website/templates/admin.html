@@ -2,7 +2,7 @@
 {% block title %}Admin{% endblock %} 
 
 {% block content %}
-<h1 align="center">Admin panel</h1>
+<h1>Admin panel</h1>
 
 <form method="POST" action="/add-game">
     <h2>Add game</h2>
@@ -20,7 +20,7 @@
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
-<h1 align="center">All Games</h1>
+<h1>All Games</h1>
     <div class="flex-container">
     {% for game in collection%}
 

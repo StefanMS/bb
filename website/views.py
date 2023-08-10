@@ -4,8 +4,13 @@ Home page backend
 from datetime import datetime, timedelta
 from flask_login import login_required, current_user
 from flask import Blueprint, render_template, request, flash, redirect, jsonify
+import logging
 from .models import User, Collection, Bidding_Basket
+
 from . import db
+
+logging.basicConfig(level=logging.INFO, filename="logs/app_logs.log", filemode="w",
+                    format="%(asctime)s - %(levelname)s - %(message)s")
 
 views = Blueprint('views', __name__)
 
@@ -38,7 +43,8 @@ def bid():
             new_bid = Bidding_Basket(game_id=game_id, player_id=user.id)
             db.session.add(new_bid)
             db.session.commit()
-            flash('Bit successful!', category="success")
+            logging.info("User: # %s enrolled for game: # %s ", user.id, game_id)
+            flash('Enrolling successful!', category="success")
 
     return redirect('/', code=302)
 
@@ -72,7 +78,7 @@ def jsonify_collection(active_games) -> list:
             else False
         now_timestamp = datetime.now().timestamp()
         countdown = now_timestamp - game.created_at.timestamp()
-        print(timedelta(seconds=countdown))
+        #print(timedelta(seconds=countdown))
         game_as_dict = {
             'id' : game.game_id,
             'name' : game.game_name,
@@ -83,4 +89,3 @@ def jsonify_collection(active_games) -> list:
         }
         games_json.append(game_as_dict)
     return games_json
-

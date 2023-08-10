@@ -2,21 +2,123 @@
 {% block title %}Account{% endblock %} 
 
 {% block content %}
-<h1 align="center">Account info</h1>
+<section id="top-account-app">
+<div class="modal-overlay" @click="closeModal">
+<h1>Account info</h1>
 
     <h3>First name</h3>
-    {{ user.first_name }}
+    <p>{{ user.first_name }}</p>
     <h3>Email</h3>
-    {{ user.email }}
+    <p>{{ user.email }}</p>
     <h3>Balance</h3>
     {% if user.balance %}
-        {{ user.balance }}
+        <p>{{ user.balance }}</p>
     {% else %}
         <p>O-oh. This looks empty</p>
     {% endif%}
-    <form method="POST" action="/top-account">
-    <button type= "submit" id="topaccount" class="btn btn-primary">Top up your account now</button>
-    </form>
+        <button @click="showModal = true" @click.stop class="btn btn-primary"> Top up your account</button>
+        <div id="myModal" @click.stop class="modal" v-show="showModal">
+            <div class="modal-content">
+                <span @click="showModal = !showModal" class="close" id="closeBtn">&times;</span>
+
+                <p>Insert amount of coins to add</p>
+                <form method="POST" action="/top-account">
+                    <input type="text" 
+                    class="form-control" id="top_amount" name="top_amount"/>
+                   <br>
+                    <button type= "submit" id="topaccount" class="btn btn-primary">Pay now</button>
+                </form>
+            </div>
+            
+        </div>
     <h3>Date joined</h3>
-    {{ user.created_at }}
-{% endblock %} 
+    <p>{{ user.created_at }}</p>
+</div>
+</section>
+
+<style>
+    /* .modal-overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        background-color: #000000da;
+      } */
+      .close {
+        color: #aaa;
+        top: 0;
+        right: 10px;
+        position: absolute;
+        font-size: 28px;
+        font-weight: bold;
+      }
+    
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .modal {
+        background-color: white;
+        z-index: 1;
+        left: 25%;
+        overflow: auto;
+        height: auto;
+        width: 50%;
+        margin-top: 10%;
+        padding: 30px 0;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation-name: modal_fadeIn;
+        animation-duration: 0.2s;
+      }
+
+      @keyframes modal_fadeIn {
+        from {opacity: 0;}
+        to {opacity: 2;}
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%; /* Could be adjusted to desired width */
+        height: 90%;
+        position: relative;
+      }
+</style>
+<script 
+    src="https://unpkg.com/vue@3/dist/vue.global.js"
+    ></script>
+<script>
+
+    const top_account_app = Vue.createApp({
+        data () {
+            return {
+                showModal: false,
+            }
+        },
+        methods: {
+            closeModal(){
+                if (this.showModal == true){
+                    this.showModal = false;
+
+                }
+        },
+        
+        },
+        delimiters: ['[[',']]'],
+    });
+    top_account_app.mount('#top-account-app');
+    
+       
+    
+</script>
+
+{% endblock %}
