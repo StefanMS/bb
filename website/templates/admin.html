@@ -3,37 +3,80 @@
 
 {% block content %}
 <h1>Admin panel</h1>
-
-<form method="POST" action="/add-game">
-    <h2>Add game</h2>
-
-    <div class="form-group">
-        <label for="game_name">Game name</label>
-        <input type="text" class="form-control" id="game_name" name="game_name" placeholder="Enter game name"/>
+<section id="admin-app">
+    <div class="admin-header" id="admin-header">
+        <button class="admin-button" @click="showTab = false">
+            Games
+        </button>
+        <button class="admin-button" @click="showTab = true">
+            Players
+        </button>
     </div>
-
-    <div class="form-group">
-        <label for="game_status">Status</label>
-        <input type="text" class="form-control" id="game_status" name="game_status" placeholder="Enter game status"/>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-<h1>All Games</h1>
-    <div class="flex-container">
-    {% for game in collection%}
-
-        <div class="flex-row">
-            <div>{{game.game_name}}</div>
-            <form method="POST" action="/activate-game?gameid={{game.game_id}}">
-                {% if game.game_status == 'active'%}
-                <button type="submit" class="btn btn-danger">Deactivate</button>
-                {% else%}
-                <button type="submit" class="btn btn-primary">Activate</button>
-                {% endif %}
+    <div v-show="showTab == false" class="admin-games-panel" id="admin-games-panel">
+        <div class="admin-add-game" id="admin-add-game">
+            <form method="POST" action="/add-game">
+                <h2>Add game</h2>
+            
+                <div class="form-group">
+                    <label for="game_name">Game name</label>
+                    <input type="text" class="form-control" id="game_name" name="game_name" placeholder="Enter game name"/>
+                </div>
+            
+                <div class="form-group">
+                    <label for="game_status">Status</label>
+                    <input type="text" class="form-control" id="game_status" name="game_status" placeholder="Enter game status"/>
+                </div>
+            
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
+        <div class="admin-all-games" id="admin-all-games">
+            <h2>All games</h2>
+            <div class="flex-container">
+            {% for game in collection%}
+        
+                <div class="flex-row">
+                    <div>{{game.game_name}}</div>
+                    <form method="POST" action="/activate-game?gameid={{game.game_id}}">
+                        {% if game.game_status == 'active'%}
+                        <button type="submit" class="btn btn-danger">Deactivate</button>
+                        {% else%}
+                        <button type="submit" class="btn btn-primary">Activate</button>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endfor%}
+            </div>
+        </div>
+        
+        
+    </div>
 
-    {% endfor%}
+    <div v-show="showTab" id="players-panel">
+
+    </div>
+
+    </section>
+
+<script 
+    src="https://unpkg.com/vue@3/dist/vue.global.js"
+    ></script>
+<script>
+
+    const admin_app = Vue.createApp({
+        data () {
+            return {
+                showTab: false,
+            }
+        },
+        
+
+        delimiters: ['[[',']]'],
+    });
+    admin_app.mount('#admin-app');
+    
+       
+    
+</script>
+
 {% endblock %} 
