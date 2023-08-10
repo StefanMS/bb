@@ -17,7 +17,7 @@
         <p>O-oh. This looks empty</p>
     {% endif%}
         <button @click="showModal = true" @click.stop class="btn btn-primary"> Top up your account</button>
-        <div id="myModal" class="modal" v-show="showModal">
+        <div id="myModal" @click.stop class="modal" v-show="showModal">
             <div class="modal-content">
                 <span @click="showModal = !showModal" class="close" id="closeBtn">&times;</span>
 
