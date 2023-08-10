@@ -1,6 +1,6 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, render_template, request, flash, redirect
-from .models import Collection
+from .models import Collection, User
 from . import db
 
 admin = Blueprint('admin', __name__)
@@ -44,6 +44,6 @@ def activate_game():
 @login_required
 def admin_view():
     collection = Collection.query
-
-    return render_template("admin.html", user=current_user, collection=collection)
+    users = User.query
+    return render_template("admin.html", user=current_user, collection=collection, users=users)
 

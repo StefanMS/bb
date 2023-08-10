@@ -52,8 +52,15 @@
         
     </div>
 
-    <div v-show="showTab" id="players-panel">
-
+    <div v-show="showTab" class="admin-players-panel" id="admin-players-panel">
+        {% for user in users %}
+        <div>
+            ID: {{user.id}}
+            Name: {{user.first_name}}
+            Balance: {{user.balance}}
+            Joined: {{user.created_at}}
+        </div>
+        {% endfor %}
     </div>
 
     </section>
