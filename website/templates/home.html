@@ -53,7 +53,16 @@
     {% endif %}
     
         <div class="game-countdown">
-            {{game.countdown}}
+
+            <div style="display:inline" v-if=" {{game.countdown.days}} > 0 ">
+                {{game.countdown.days}} days
+            </div>
+            
+
+            <div style="display:inline" v-if=" {{game.countdown.hours}} > 0 ">
+                {{game.countdown.hours}} hours
+            </div>
+            left
         </div>
 </div>
 {% endfor%}

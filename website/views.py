@@ -85,7 +85,18 @@ def jsonify_collection(active_games) -> list:
             'status' : game.game_status,
             'enrolled_user' : enrolled_user_bool,
             'capacity' : game_capacity,
-            'countdown' : str(f'{int(countdown//3600)} hours left')
+            'countdown' : {'days' : str(f'{int(countdown//(3600*60))}'),
+                           
+                           'hours': str(f'{int((countdown%(3600*60))//3600)}')
+                           # minutes: ;
+                           # seconds: ; 
+                           }
         }
         games_json.append(game_as_dict)
     return games_json
+
+# class Countdown:
+    
+#     def __init__(self, timestamp):
+#         self.days = timestamp
+#         self.hours = str(f'{int(countdown//3600)}

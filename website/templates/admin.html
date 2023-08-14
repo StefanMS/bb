@@ -14,20 +14,29 @@
     </div>
     <div v-show="showTab == false" class="admin-games-panel" id="admin-games-panel">
         <div class="admin-add-game" id="admin-add-game">
-            <form method="POST" action="/add-game">
+            <form method="POST" action="/add-game" enctype="multipart/form-data">
                 <h2>Add game</h2>
             
                 <div class="form-group">
                     <label for="game_name">Game name</label>
-                    <input type="text" class="form-control" id="game_name" name="game_name" placeholder="Enter game name"/>
+                    <input type="text" class="form-control" id="game_name" name="game_name" placeholder="Enter game name" required/>
                 </div>
             
                 <div class="form-group">
                     <label for="game_status">Status</label>
-                    <input type="text" class="form-control" id="game_status" name="game_status" placeholder="Enter game status"/>
+                    <br>
+                    <input type="checkbox" id="activate-game" name="activate_game" @click="activateGame"/> Active
+                    <input type="checkbox" id="deactivate-game" name="deactivate_game" @click="deactivateGame"/> Inactive
+                <!--<input type="text" class="form-control" id="game_status" name="game_status" placeholder="Enter game status"/>
+                -->
+                </div>
+                <div class="form-group">
+                    <label>Add image</label>
+                    <br>
+                    <input type="file" name="img" id="img" required/>
                 </div>
             
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <input type="submit" class="btn btn-primary" value="Upload"/>
             </form>
         </div>
         <div class="admin-all-games" id="admin-all-games">
@@ -75,8 +84,19 @@
             return {
                 showTab: false,
             }
-        },
         
+        },
+        methods: {
+            activateGame (){
+                document.getElementById("activate-game").checked = true;
+                document.getElementById("deactivate-game").checked = false;
+            },
+            deactivateGame (){
+                document.getElementById("activate-game").checked = false;
+                document.getElementById("deactivate-game").checked = true;
+            },
+
+        },
 
         delimiters: ['[[',']]'],
     });
