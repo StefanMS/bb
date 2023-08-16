@@ -46,12 +46,17 @@
         
                 <div class="flex-row">
                     <div>{{game.game_name}}</div>
-                    <form method="POST" action="/activate-game?gameid={{game.game_id}}">
+                    <form style="display:inline" method="POST" action="/activate-game?gameid={{game.game_id}}">
                         {% if game.game_status == 'active'%}
                         <button type="submit" class="btn btn-danger">Deactivate</button>
                         {% else%}
                         <button type="submit" class="btn btn-primary">Activate</button>
                         {% endif %}
+                    </form>
+                    <form style="display:inline" method="POST" action="/reset-game?gameid={{game.game_id}}">
+                        <button type="submit" class="btn btn-warning">
+                            Reset game
+                        </button>
                     </form>
                 </div>
             {% endfor%}
