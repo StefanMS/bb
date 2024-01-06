@@ -7,10 +7,12 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
+UPLOAD_FOLDER = '/website/static/images'
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'pacanele'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config.update(
         SESSION_COOKIE_SECURE=True,

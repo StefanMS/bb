@@ -22,7 +22,7 @@ h1 {
     color: #3498db;
     /*border-bottom: 2px solid #3498db; */
     padding-top: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -174,3 +174,132 @@ footer p {
     max-width: 30%;
     padding: 20px;
 }
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    align-items: center;
+  justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.admin-button {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 36px;
+    color: #333; /* Button text color */
+    border: 2px solid transparent; /* Transparent border initially */
+    background-color: transparent; /* Transparent background */
+    border-radius: 10px;
+    transition: border-color 0.3s ease; /* Transition effect for the border color */
+    background: none;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.admin-button:hover {
+    border-color: #3498db; /* Border color on hover */
+    text-decoration: underline; /* Underline the button text on hover */
+}
+
+.admin-games-panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-add-game {
+  
+    width: 45%;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+
+}
+.admin-all-games {
+    width: 45%;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.admin-players-panel {
+    display: block;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.account-panel {
+    display: block;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+    color: #aaa;
+    top: 0;
+    right: 10px;
+    position: absolute;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .modal {
+    background-color: white;
+    z-index: 1;
+    left: 25%;
+    overflow: auto;
+    height: auto;
+    width: 50%;
+    margin-top: 10%;
+    padding: 30px 0;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation-name: modal_fadeIn;
+    animation-duration: 0.2s;
+  }
+
+  @keyframes modal_fadeIn {
+    from {opacity: 0;}
+    to {opacity: 2;}
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; /* Could be adjusted to desired width */
+    height: 90%;
+    position: relative;}
