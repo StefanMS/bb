@@ -61,8 +61,8 @@ def activate_game():
             db.session.commit()
             flash('Change successful!', category="success")
    
-        except:
-            print("Activation error")
+        except Exception as e:
+            raise e
     return redirect('/admin', code=302)
 
 
